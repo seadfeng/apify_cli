@@ -67,8 +67,6 @@ module Apify
         RestClient::Request.execute(opts)
       rescue RestClient::ExceptionWithResponse  => e
           case e.http_code
-          when 401
-            e.response
           when 301, 302, 307
             e.response.follow_redirection
           else 

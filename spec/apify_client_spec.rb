@@ -5,10 +5,9 @@ RSpec.describe Apify::Client do
     expect { Apify::Client.new }.to raise_error(ArgumentError, /Token cannot be nil/)
   end
 
-  it "Get 401 Test error" do
+  it "Test 401 error" do
     client = Apify::Client.new(token: 'test')
-    res = client.get_actors
-    expect(res['error'].is_a?(Hash)).to eq(true)
+    expect {client.get_actors}.to raise_error(RestClient::Unauthorized)
   end
 
   client = Apify::Client.new(token: ENV['APIFY_TOKEN'])
