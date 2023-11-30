@@ -24,8 +24,8 @@ module Apify
     end
 
     # create run with actor id
-    def create_run(id:, **op_options)
-      get_data(response: request(op: :create_run, id:, op_options:))
+    def create_run(id:, payload:, **op_options)
+      get_data(response: request(op: :create_run, id:, payload:, op_options:))
     end
 
     def get_run(id:, **op_options)
@@ -50,7 +50,7 @@ module Apify
       raise ArguemntError unless Apify::OPERATIONS.keys.include?(op)
       operation = OPERATIONS[op]
       id = options[:id]
-      options.delete(:id)
+      options.delete(:id) if options.has_key?(:id)
       rest_client(url: operation.get_url(id:, **op_options), method: operation.http_method, **options)
     end
 
