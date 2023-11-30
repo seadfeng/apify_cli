@@ -5,6 +5,29 @@ require_relative "apify/client"
 
 module Apify
   class Error < StandardError; end
+
+  Operation = Struct.new(:target_name, :http_method, :url )  do
+    def origin
+      "https://api.apify.com/v2"
+    end
+
+    def get_url(id: nil)
+      str = if id && id.is_a?(String)
+        url.sub(/{{id}}/,id)
+      else
+        url
+      end
+      "#{origin}/#{str}"
+    end
+  end
+
+  OPERATIONS = {
+    get_actors:                 Operation.new('GetActors',          'GET',    'acts'                                   ),
+    get_run:                    Operation.new('GetRun',             'GET',    'actor-runs/{{id}}'                      ),
+    get_runs:                   Operation.new('GetRuns',            'GET',    'actor-runs'                             ),
+    create_run:                 Operation.new('CreateRun',          'POST',   'acts/{{id}}/runs'                       ),
+  }.freeze
+
   class << self
     attr_accessor :token
 
