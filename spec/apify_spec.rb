@@ -26,4 +26,14 @@ RSpec.describe Apify do
     expect(operation.get_url).to eq('https://api.apify.com/v2/acts')
   end
 
+  it "Test Get Dataset Item Url" do
+    operation = Apify::OPERATIONS[:get_dataset_items]
+    expect(operation.get_url(id: 'db-id')).to eq('https://api.apify.com/v2/datasets/db-id/items')
+  end
+
+  it "Test Get Dataset Item Url with params" do
+    operation = Apify::OPERATIONS[:get_dataset_items]
+    expect(operation.get_url(id: 'db-id', limit: 100)).to eq('https://api.apify.com/v2/datasets/db-id/items?limit=100')
+  end
+
 end

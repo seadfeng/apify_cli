@@ -11,20 +11,28 @@ module Apify
       "https://api.apify.com/v2"
     end
 
-    def get_url(id: nil)
+    def get_url(id: nil, **options)
       str = if id && id.is_a?(String)
         url.sub(/{{id}}/,id)
       else
         url
       end
-      "#{origin}/#{str}"
+      str = "#{origin}/#{str}"
+      if options.nil? || options.empty?
+        str
+      else
+       "#{str}?#{ options.map{|k,v| "#{k}=#{v}" }&.join('&')}"
+      end
     end
   end
-
+  
   OPERATIONS = {
     get_actors:                 Operation.new('GetActors',          'GET',    'acts'                                   ),
-    get_run:                    Operation.new('GetRun',             'GET',    'actor-runs/{{id}}'                      ),
+    get_datasets:               Operation.new('GetDatasets',        'GET',    'datasets'                               ),
+    get_dataset:                Operation.new('GetDataset',         'GET',    'datasets/{{id}}'                        ),
+    get_dataset_items:          Operation.new('GetDatasetItems',    'GET',    'datasets/{{id}}/items'                  ),
     get_runs:                   Operation.new('GetRuns',            'GET',    'actor-runs'                             ),
+    get_run:                    Operation.new('GetRun',             'GET',    'actor-runs/{{id}}'                      ),
     create_run:                 Operation.new('CreateRun',          'POST',   'acts/{{id}}/runs'                       ),
   }.freeze
 

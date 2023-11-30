@@ -11,21 +11,35 @@ module Apify
       raise ArgumentError, "Token cannot be nil" if token.nil?
     end
 
-    def get_actors
-      get_data(response: request(op: :get_actors))
+    def get_actors(**op_options)
+      get_data(response: request(op: :get_actors, op_options:))
     end
 
-    def get_runs
-      get_data(response: request(op: :get_runs))
+    def get_runs(**op_options)
+      get_data(response: request(op: :get_runs, op_options:))
+    end
+
+    def get_datasets(**op_options)
+      get_data(response: request(op: :get_datasets, op_options:))
     end
 
     # create run with actor id
-    def create_run(id:)
-      get_data(response: request(op: :create_run, id:))
+    def create_run(id:, **op_options)
+      get_data(response: request(op: :create_run, id:, op_options:))
     end
 
-    def get_run(id:)
-      get_data(response: request(op: :get_run, id:))
+    def get_run(id:, **op_options)
+      get_data(response: request(op: :get_run, id:, op_options:))
+    end
+
+    # get dataset with run id
+    def get_dataset(id:, **op_options)
+      get_data(response: request(op: :get_dataset, id:, op_options:))
+    end
+
+    # get dataset item with run id
+    def get_dataset_items(id:, **op_options)
+      get_data(response: request(op: :get_dataset_items, id:, op_options:))
     end
  
     private
@@ -34,17 +48,17 @@ module Apify
       JSON.parse(response.body.to_s)
     end
 
-    def request(op:, **options)
+    def request(op:, op_options: {}, **options)
       raise ArguemntError unless Apify::OPERATIONS.keys.include?(op)
       operation = OPERATIONS[op]
       id = options[:id]
       options.delete(:id)
-      rest_client(url: operation.get_url(id:), method: operation.http_method, **options)
+      rest_client(url: operation.get_url(id:, **op_options), method: operation.http_method, **options)
     end
 
     def default_headers
       {  
-        user_agent: 'Apify Client V2',
+        user_agent: "Apify Client V2/#{Apify::VERSION}",
         authorization: "Bearer #{token}"
       }
     end
