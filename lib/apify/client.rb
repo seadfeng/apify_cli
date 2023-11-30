@@ -51,18 +51,20 @@ module Apify
       operation = OPERATIONS[op]
       id = options[:id]
       options.delete(:id) if options.has_key?(:id)
+      
       rest_client(url: operation.get_url(id:, **op_options), method: operation.http_method, **options)
     end
 
     def default_headers
       {  
-        user_agent: "Apify Client V2/#{Apify::VERSION}",
-        authorization: "Bearer #{token}"
+        'User-Agent': "Apify Client V2/#{Apify::VERSION}",
+        'Authorization': "Bearer #{token}",
+        'Content-Type': 'application/json'
       }
     end
 
     def rest_client( opts = {} ) 
-      opts.merge!(headers: default_headers, max_redirects: 0, verify_ssl: false, timeout: 5)   
+      opts.merge!(headers: default_headers, max_redirects: 0, verify_ssl: false, timeout: 5)
       begin
         RestClient::Request.execute(opts)
       rescue RestClient::ExceptionWithResponse  => e
