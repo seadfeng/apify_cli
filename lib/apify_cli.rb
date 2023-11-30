@@ -5,7 +5,6 @@ require_relative "apify/client"
 
 module Apify
   class Error < StandardError; end
-  # Your code goes here...
   class << self
     attr_accessor :token
 
