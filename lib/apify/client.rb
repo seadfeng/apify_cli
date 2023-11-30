@@ -32,12 +32,10 @@ module Apify
       get_data(response: request(op: :get_run, id:, op_options:))
     end
 
-    # get dataset with run id
     def get_dataset(id:, **op_options)
       get_data(response: request(op: :get_dataset, id:, op_options:))
     end
 
-    # get dataset item with run id
     def get_dataset_items(id:, **op_options)
       get_data(response: request(op: :get_dataset_items, id:, op_options:))
     end
