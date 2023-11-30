@@ -8,31 +8,32 @@ module Apify
   
     def initialize(token: Apify.token)
       @token = token
+      raise ArgumentError, "Token cannot be nil" if token.nil?
     end
 
     def get_actors
-      request(op: :get_actors)
+      get_data(response: request(op: :get_actors))
     end
 
     def get_runs
-      request(op: :get_runs)
+      get_data(response: request(op: :get_runs))
     end
 
     # create run with actor id
     def create_run(id:)
-      request(op: :create_run, id:)
+      get_data(response: request(op: :create_run, id:))
     end
 
-    # Todo
-    # def get_actor(id:)
-    #   request(op: :get_actor, id:)
-    # end
-
     def get_run(id:)
-      request(op: :get_run, id:)
+      get_data(response: request(op: :get_run, id:))
     end
  
     private
+
+    def get_data(response:)
+      JSON.parse(response.body.to_s)
+    end
+
     def request(op:, **options)
       raise ArguemntError unless Apify::OPERATIONS.keys.include?(op)
       operation = OPERATIONS[op]
@@ -49,20 +50,19 @@ module Apify
     end
 
     def rest_client( opts = {} ) 
-      puts opts
-      # opts.merge!(headers: default_headers)   
-      # begin
-      #   @response = RestClient::Request.execute(opts)
-      # rescue RestClient::ExceptionWithResponse  => e
-      #     case e.http_code
-      #     when 404
-      #       e.response
-      #     when 301, 302, 307
-      #       e.response.follow_redirection
-      #     else 
-      #       raise
-      #     end
-      # end
+      opts.merge!(headers: default_headers, max_redirects: 0, verify_ssl: false, timeout: 5)   
+      begin
+        RestClient::Request.execute(opts)
+      rescue RestClient::ExceptionWithResponse  => e
+          case e.http_code
+          when 401
+            e.response
+          when 301, 302, 307
+            e.response.follow_redirection
+          else 
+            raise
+          end
+      end
     end
   end
 end
