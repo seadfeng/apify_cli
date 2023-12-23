@@ -21,6 +21,11 @@ RSpec.describe Apify do
     expect(operation.get_url(id: 'actor-id')).to eq('https://api.apify.com/v2/acts/actor-id/runs')
   end
 
+  it "Test Resurrect Run Url" do
+    operation = Apify::OPERATIONS[:resurrect_run]
+    expect(operation.get_url(id: 'actor-id')).to eq('https://api.apify.com/v2/actor-runs/actor-id/resurrect')
+  end
+
   it "Test Get Actors Url" do
     operation = Apify::OPERATIONS[:get_actors]
     expect(operation.get_url).to eq('https://api.apify.com/v2/acts')

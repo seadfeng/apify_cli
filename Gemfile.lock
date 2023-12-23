@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    apify_cli (0.1.0)
+    apify_cli (0.1.1)
       rest-client
 
 GEM
