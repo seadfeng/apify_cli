@@ -28,6 +28,10 @@ module Apify
       get_data(response: request(op: :create_run, id:, payload:, op_options:))
     end
 
+    def resurrect_run(id:, **op_options)
+      get_data(response: request(op: :resurrect_run, id:, op_options:))
+    end
+
     def get_run(id:, **op_options)
       get_data(response: request(op: :get_run, id:, op_options:))
     end

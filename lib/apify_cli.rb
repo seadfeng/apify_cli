@@ -34,6 +34,7 @@ module Apify
     get_runs:                   Operation.new('GetRuns',            'GET',    'actor-runs'                             ),
     get_run:                    Operation.new('GetRun',             'GET',    'actor-runs/{{id}}'                      ),
     create_run:                 Operation.new('CreateRun',          'POST',   'acts/{{id}}/runs'                       ),
+    resurrect_run:              Operation.new('ResurrectRun',       'POST',   'actor-runs/{{id}}/resurrect'            ),
   }.freeze
 
   class << self
